@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A.R. Kavya | Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --text:#1F2440;
+    --muted:#5B6280;
+    --accent:#7C6CF5;
+    --accent2:#22C7B5;
+    --accent3:#F5A3C7;
+    --glass-bg:rgba(255,255,255,0.45);
+    --glass-border:rgba(255,255,255,0.65);
+    --glass-bg-strong:rgba(255,255,255,0.6);
+    --glass-shadow:rgba(90,80,180,0.12);
+    --tag-bg:rgba(255,255,255,0.55);
+    --input-bg:rgba(255,255,255,0.6);
+    color-scheme:light;
+  }
+
+  [data-theme="dark"]{
+    --text:#E7E9F5;
+    --muted:#A0A6C0;
+    --accent:#9C8CFF;
+    --accent2:#3FE0CC;
+    --accent3:#FF9FCB;
+    --glass-bg:rgba(30,28,60,0.45);
+    --glass-border:rgba(255,255,255,0.12);
+    --glass-bg-strong:rgba(30,28,60,0.6);
+    --glass-shadow:rgba(0,0,0,0.35);
+    --tag-bg:rgba(255,255,255,0.06);
+    --input-bg:rgba(255,255,255,0.06);
+    color-scheme:dark;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  body{
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+    background:
+      radial-gradient(circle at 15% 20%, #C9C1FF 0%, transparent 45%),
+      radial-gradient(circle at 85% 15%, #A9F1E8 0%, transparent 45%),
+      radial-gradient(circle at 30% 85%, #FFD4E8 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, #C4E8FF 0%, transparent 50%),
+      linear-gradient(135deg, #EEF0FF 0%, #F6F3FF 100%);
+    background-attachment:fixed;
+    transition:background .4s ease, color .4s ease;
+  }
+
+  [data-theme="dark"] body{
+    background:
+      radial-gradient(circle at 15% 20%, rgba(124,108,245,0.25) 0%, transparent 45%),
+      radial-gradient(circle at 85% 15%, rgba(34,199,181,0.18) 0%, transparent 45%),
+      radial-gradient(circle at 30% 85%, rgba(245,163,199,0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(124,108,245,0.15) 0%, transparent 50%),
+      linear-gradient(135deg, #0E0C1E 0%, #14122B 100%);
+  }
+
+  h1,h2,h3{ font-family:'Space Grotesk', sans-serif; }
+  .mono{ font-family:'JetBrains Mono', monospace; }
+  a{ color:inherit; text-decoration:none; }
+
+  /* floating blobs */
+  .blob{
+    position:fixed; border-radius:50%;
+    filter:blur(70px);
+    z-index:-1;
+    animation:float 18s ease-in-out infinite;
+  }
+  .blob1{ width:420px; height:420px; background:rgba(124,108,245,0.35); top:-100px; left:-120px; }
+  .blob2{ width:360px; height:360px; background:rgba(34,199,181,0.3); bottom:-80px; right:-100px; animation-delay:3s; }
+  .blob3{ width:300px; height:300px; background:rgba(245,163,199,0.3); top:40%; right:10%; animation-delay:6s; }
+  @keyframes float{
+    0%,100%{ transform:translate(0,0) scale(1); }
+    50%{ transform:translate(30px,-40px) scale(1.08); }
+  }
+
+  /* glass base */
+  .glass{
+    background:var(--glass-bg);
+    border:1px solid var(--glass-border);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    box-shadow:0 8px 32px var(--glass-shadow);
+    transition:background .4s ease, border-color .4s ease;
+  }
+
+  /* theme toggle */
+  .theme-toggle{
+    width:38px; height:38px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    border:1px solid var(--glass-border);
+    background:var(--glass-bg);
+    font-size:16px;
+    flex-shrink:0;
+    transition:transform .3s ease, background .4s ease;
+  }
+  .theme-toggle:hover{ transform:scale(1.08) rotate(15deg); }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:fixed; top:16px; left:50%; transform:translateX(-50%);
+    display:flex; justify-content:space-between; align-items:center;
+    gap:32px;
+    padding:14px 30px;
+    border-radius:50px;
+    z-index:100;
+    width:min(760px, 90vw);
+  }
+  nav .logo{ font-weight:700; letter-spacing:1px; color:var(--accent); }
+  nav ul{ list-style:none; display:flex; gap:22px; }
+  nav a{ font-size:13.5px; color:var(--muted); font-weight:500; transition:color .25s; }
+  nav a:hover{ color:var(--accent); }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center;
+    padding:140px 20px 60px;
+  }
+  .hero-image{ position:relative; margin-bottom:10px; }
+  .profile-photo{
+    width:180px; height:180px;
+    border-radius:50%;
+    object-fit:cover;
+    border:5px solid rgba(255,255,255,0.8);
+    box-shadow:0 15px 40px rgba(124,108,245,0.35);
+    transition:.4s ease;
+  }
+  .profile-photo:hover{ transform:scale(1.05) rotate(-2deg); }
+
+  .hero h1{
+    font-size:clamp(2.2rem, 5vw, 3.4rem);
+    font-weight:700;
+    margin:18px 0 8px;
+  }
+  .hero .role{
+    font-family:'JetBrains Mono', monospace;
+    color:var(--accent);
+    font-size:15px;
+    min-height:24px;
+    margin-bottom:18px;
+    font-weight:500;
+  }
+  .hero .role::after{ content:'|'; animation:blink 1s step-start infinite; }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  .hero p.tag{
+    max-width:560px; margin:0 auto 30px;
+    color:var(--muted); font-size:16px;
+  }
+
+  .btn-row{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+  .btn{
+    padding:13px 28px;
+    border-radius:50px;
+    font-size:14px;
+    font-weight:600;
+    transition:transform .25s, box-shadow .25s;
+  }
+  .btn.primary{
+    background:linear-gradient(135deg, var(--accent), var(--accent2));
+    color:#fff;
+    box-shadow:0 10px 30px rgba(124,108,245,0.35);
+  }
+  .btn.primary:hover{ transform:translateY(-3px); box-shadow:0 14px 34px rgba(124,108,245,0.45); }
+  .btn.ghost{ color:var(--accent); border:1.5px solid rgba(124,108,245,0.4); }
+  .btn.ghost:hover{ transform:translateY(-3px); background:rgba(124,108,245,0.08); }
+
+  /* ---------- SECTIONS ---------- */
+  section{ padding:80px 8vw; max-width:1100px; margin:0 auto; }
+
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    color:var(--accent);
+    font-size:13px; letter-spacing:2px; text-transform:uppercase;
+    margin-bottom:8px; font-weight:500;
+  }
+  .section-title{ font-size:2rem; margin-bottom:36px; }
+
+  .reveal{
+    opacity:0; transform:translateY(24px);
+    transition:opacity .7s ease, transform .7s ease;
+  }
+  .reveal.show{ opacity:1; transform:translateY(0); }
+
+  .panel{ border-radius:20px; padding:26px; }
+
+  /* about */
+  .about-grid{ display:grid; grid-template-columns:1fr 1fr; gap:32px; align-items:start; }
+  .about-grid p{ color:var(--muted); }
+  .stats{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .stat-box{ border-radius:16px; padding:20px; text-align:center; }
+  .stat-num{ font-family:'Space Grotesk'; font-size:1.5rem; color:var(--accent); font-weight:700; }
+  .stat-label{ font-size:12px; color:var(--muted); margin-top:4px; }
+
+  /* skills */
+  .skills-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:22px; }
+  .skill-category{ border-radius:18px; padding:24px; transition:transform .3s; }
+  .skill-category:hover{ transform:translateY(-6px); }
+  .skill-category h3{
+    font-size:1rem; color:var(--accent); margin-bottom:16px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .skill-category h3::before{
+    content:''; width:8px; height:8px; border-radius:50%;
+    background:var(--accent3); box-shadow:0 0 8px var(--accent3);
+  }
+  .skill-tags{ display:flex; flex-wrap:wrap; gap:9px; }
+  .tag{
+    font-family:'JetBrains Mono', monospace; font-size:12px;
+    padding:7px 14px; border-radius:20px;
+    background:var(--tag-bg);
+    border:1px solid rgba(124,108,245,0.25);
+    color:var(--text);
+    transition:all .25s;
+  }
+  .tag:hover{ border-color:var(--accent); color:var(--accent); transform:translateY(-2px) scale(1.05); background:var(--glass-bg-strong); }
+
+  /* cards / projects */
+  .card-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:22px; }
+  .proj-card{ border-radius:18px; padding:26px; transition:transform .3s; }
+  .proj-card:hover{ transform:translateY(-6px); }
+  .proj-card h3{ font-size:1.1rem; margin-bottom:10px; }
+  .proj-card p{ color:var(--muted); font-size:14px; margin-bottom:14px; }
+  .proj-card .stack{ display:flex; flex-wrap:wrap; gap:8px; }
+  .proj-card .stack span{
+    font-family:'JetBrains Mono'; font-size:11px;
+    color:#6C4FD6;
+    background:rgba(124,108,245,0.12);
+    padding:4px 10px; border-radius:6px;
+  }
+  .badge-progress{
+    display:inline-block; margin-top:10px;
+    font-family:'JetBrains Mono'; font-size:11px;
+    color:#B8760A; border:1px solid #E0A73A;
+    background:rgba(224,167,58,0.12);
+    padding:2px 10px; border-radius:12px;
+  }
+
+  /* timeline */
+  .timeline{ border-left:2px solid rgba(124,108,245,0.3); padding-left:28px; }
+  .t-item{ position:relative; margin-bottom:34px; }
+  .t-item::before{
+    content:''; position:absolute; left:-34px; top:4px;
+    width:12px; height:12px; border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 0 5px rgba(124,108,245,0.15);
+  }
+  .t-item h3{ font-size:1.02rem; }
+  .t-item .meta{ color:var(--muted); font-size:13px; margin-top:2px; }
+
+  /* achievements */
+  .ach-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px; }
+  .ach-card{ border-radius:16px; padding:20px; font-size:14px; color:var(--muted); }
+  .ach-card strong{ color:var(--text); display:block; margin-bottom:6px; }
+
+  /* contact form */
+  .contact-form{ max-width:560px; display:flex; flex-direction:column; gap:16px; }
+  .form-row{ display:flex; gap:16px; }
+  .contact-form input, .contact-form textarea{
+    background:var(--input-bg);
+    border:1px solid rgba(124,108,245,0.25);
+    border-radius:12px;
+    padding:12px 14px;
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    font-size:14px;
+    flex:1; resize:vertical;
+  }
+  .contact-form input:focus, .contact-form textarea:focus{ outline:none; border-color:var(--accent); background:var(--glass-bg-strong); }
+  .contact-form button{ align-self:flex-start; border:none; cursor:pointer; }
+
+  @media(max-width:600px){ .form-row{ flex-direction:column; } }
+
+  /* footer */
+  footer{ text-align:center; padding:40px 20px 50px; color:var(--muted); font-size:13px; }
+  footer .socials{ margin-bottom:14px; display:flex; gap:20px; justify-content:center; flex-wrap:wrap; }
+  footer .socials a{
+    color:var(--muted); font-weight:500; transition:color .25s;
+    padding:6px 14px; border-radius:20px;
+  }
+  footer .socials a:hover{ color:var(--accent); background:rgba(124,108,245,0.08); }
+
+  @media(max-width:720px){
+    .about-grid{ grid-template-columns:1fr; }
+    nav{ width:94vw; gap:14px; padding:12px 18px; }
+    nav ul{ gap:12px; }
+    nav a{ font-size:12px; }
+    section{ padding:64px 6vw; }
+  }
+  @media(max-width:520px){
+    nav ul{ display:none; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+<div class="blob blob3"></div>
+
+<nav class="glass">
+  <div class="logo mono">Kavya</div>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+</nav>
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-image">
+      <img src="images/kavya.jpeg" alt="A.R. Kavya" class="profile-photo">
+    </div>
+    <h1>A.R. Kavya</h1>
+    <div class="role mono" id="typed"></div>
+    <p class="tag">Final-year AI &amp; Data Science student building ML pipelines, RAG systems, and data-driven products &mdash; from crop-disease prediction to intelligent document analysis.</p>
+    <div class="btn-row">
+      <a href="#projects" class="btn primary">View Projects</a>
+      <a href="https://raw.githubusercontent.com/kavyaamma175/resume/main/kavya_final(resume).pdf" download class="btn ghost glass">📄 Download Resume</a>
+      <a href="#contact" class="btn ghost glass">Get in Touch</a>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="eyebrow reveal">Introduction</div>
+  <h2 class="section-title reveal">About Me</h2>
+  <div class="about-grid">
+    <p class="reveal glass panel">I'm an Artificial Intelligence &amp; Data Science undergraduate at Akshaya College of Engineering and Technology, expected to graduate in 2027. I enjoy turning raw data into working systems &mdash; whether that's benchmarking ML models for agriculture, building RAG pipelines for research assistants, or designing early-warning systems with reinforcement learning.</p>
+    <div class="stats reveal">
+      <div class="stat-box glass"><div class="stat-num">8.51</div><div class="stat-label">CGPA / 10</div></div>
+      <div class="stat-box glass"><div class="stat-num">80+</div><div class="stat-label">LeetCode Problems</div></div>
+      <div class="stat-box glass"><div class="stat-num">100%</div><div class="stat-label">Recall, Anomaly Model</div></div>
+      <div class="stat-box glass"><div class="stat-num">50+</div><div class="stat-label">Day Coding Streak</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="eyebrow reveal">Toolkit</div>
+  <h2 class="section-title reveal">Skills &amp; Tools</h2>
+  <div class="skills-grid">
+    <div class="skill-category glass reveal">
+      <h3>Programming</h3>
+      <div class="skill-tags">
+        <span class="tag">Python</span>
+        <span class="tag">Java</span>
+        <span class="tag">SQL</span>
+        <span class="tag">C</span>
+      </div>
+    </div>
+    <div class="skill-category glass reveal">
+      <h3>Data Science &amp; ML</h3>
+      <div class="skill-tags">
+        <span class="tag">Machine Learning</span>
+        <span class="tag">Deep Learning</span>
+        <span class="tag">Reinforcement Learning</span>
+        <span class="tag">NLP</span>
+        <span class="tag">RAG Architecture</span>
+        <span class="tag">Predictive Modeling</span>
+        <span class="tag">DSA</span>
+        <span class="tag">DBMS</span>
+      </div>
+    </div>
+    <div class="skill-category glass reveal">
+      <h3>Tools &amp; Platforms</h3>
+      <div class="skill-tags">
+        <span class="tag">Power BI</span>
+        <span class="tag">TensorFlow</span>
+        <span class="tag">Scikit-Learn</span>
+        <span class="tag">MySQL</span>
+        <span class="tag">WEKA</span>
+        <span class="tag">Jupyter Notebook</span>
+        <span class="tag">Google Colab</span>
+        <span class="tag">VS Code</span>
+        <span class="tag">GitHub</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="eyebrow reveal">Internship</div>
+  <h2 class="section-title reveal">Experience</h2>
+  <div class="proj-card glass reveal">
+    <h3>Advanced AI &amp; Multimodal Systems Intern</h3>
+    <div class="meta mono" style="color:var(--muted); font-size:13px; margin-bottom:12px;">Taars Systems and Solutions &middot; December 2025</div>
+    <p style="margin-bottom:14px;">Completed an intensive internship building intelligent, context-aware, multimodal AI applications &mdash; developing a foundational understanding of RAG architectures, NLP processing, and practical AI deployment workflows.</p>
+    <div class="stack">
+      <span>RAG</span><span>NLP</span><span>Multimodal AI</span><span>Deployment</span>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="eyebrow reveal">Selected Work</div>
+  <h2 class="section-title reveal">Projects</h2>
+  <div class="card-grid">
+    <div class="proj-card glass reveal">
+      <h3>Crop Disease Prediction using ML</h3>
+      <p>Benchmarked Random Forest, SVM, 1D CNN and LSTM for multi-class crop disease detection. Achieved 41.9% peak accuracy and a specialized LSTM with 100% recall for high-stress anomaly detection.</p>
+      <div class="stack">
+        <span>Python</span><span>Scikit-Learn</span><span>TensorFlow</span><span>LSTM</span>
+      </div>
+    </div>
+    <div class="proj-card glass reveal">
+      <h3>Research Paper Analysis Assistant (RAG)</h3>
+      <p>Built an AI-powered document analysis system combining vector databases with LLM inference for context-aware retrieval over unstructured academic text.</p>
+      <div class="stack">
+        <span>RAG</span><span>NLP</span><span>Vector DB</span><span>LLM</span>
+      </div>
+    </div>
+    <div class="proj-card glass reveal">
+      <h3>AI Drainage Risk Prediction System</h3>
+      <p>Environmental monitoring system for flood-risk assessment, modeling drainage failure patterns using ML and reinforcement learning for proactive resource allocation.</p>
+      <div class="stack">
+        <span>Python</span><span>ML</span><span>Reinforcement Learning</span>
+      </div>
+      <span class="badge-progress">In Progress</span>
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="eyebrow reveal">Background</div>
+  <h2 class="section-title reveal">Education</h2>
+  <div class="timeline">
+    <div class="t-item reveal">
+      <h3>B.Tech, Artificial Intelligence &amp; Data Science</h3>
+      <div class="meta mono">Akshaya College of Engineering and Technology &middot; Expected 2027 &middot; CGPA 8.51/10</div>
+    </div>
+    <div class="t-item reveal">
+      <h3>Higher Secondary (12th Standard)</h3>
+      <div class="meta mono">Mariammal Girls Higher Secondary School &middot; 2022&ndash;2023 &middot; 83%</div>
+    </div>
+  </div>
+</section>
+
+<section id="journey">
+  <div class="eyebrow reveal">Timeline</div>
+  <h2 class="section-title reveal">My Journey</h2>
+  <div class="timeline">
+    <div class="t-item reveal">
+      <h3>2023 &middot; College Began</h3>
+      <div class="meta mono">Started B.Tech in AI &amp; Data Science at Akshaya College of Engineering and Technology</div>
+    </div>
+    <div class="t-item reveal">
+      <h3>2024 &middot; Foundations</h3>
+      <div class="meta mono">Built strong fundamentals in Python, DSA, and DBMS</div>
+    </div>
+    <div class="t-item reveal">
+      <h3>2025 &middot; Internship &amp; Projects</h3>
+      <div class="meta mono">Interned at Taars Systems &middot; built Crop Disease Prediction &amp; RAG Research Assistant</div>
+    </div>
+    <div class="t-item reveal">
+      <h3>2026 &middot; Applied ML</h3>
+      <div class="meta mono">Developing the AI Drainage Risk Prediction System with reinforcement learning</div>
+    </div>
+    <div class="t-item reveal">
+      <h3>2027 &middot; Graduation</h3>
+      <div class="meta mono">Expected to graduate &middot; seeking a data-driven / ML engineering role</div>
+    </div>
+  </div>
+</section>
+
+<section id="achievements">
+  <div class="eyebrow reveal">Recognition</div>
+  <h2 class="section-title reveal">Certifications</h2>
+  <div class="card-grid" style="margin-bottom:50px;">
+    <div class="proj-card glass reveal">
+      <h3>Microsoft Generative AI Badge</h3>
+      <p>Professional certification covering generative AI fundamentals and applied use cases.</p>
+    </div>
+    <div class="proj-card glass reveal">
+      <h3>Machine Learning Internship</h3>
+      <p>CodeAlpha &mdash; Introduction to Artificial Intelligence &amp; Machine Learning.</p>
+    </div>
+    <div class="proj-card glass reveal">
+      <h3>Advanced AI &amp; Multimodal Systems</h3>
+      <p>Taars Systems and Solutions &mdash; RAG architectures &amp; NLP deployment workflows.</p>
+    </div>
+  </div>
+
+  <div class="eyebrow reveal">Recognition</div>
+  <h2 class="section-title reveal">Achievements</h2>
+  <div class="ach-grid">
+    <div class="ach-card glass reveal"><strong>Academic Excellence</strong>First Rank in First-Year Academics, CGPA 9.18/10</div>
+    <div class="ach-card glass reveal"><strong>Problem Solving</strong>80+ coding problems solved on LeetCode with a 50+ day streak</div>
+    <div class="ach-card glass reveal"><strong>HackerRank</strong>3 technical skill badges in programming &amp; algorithms</div>
+    <div class="ach-card glass reveal"><strong>NSS</strong>Active participant, building leadership &amp; teamwork</div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="eyebrow reveal">Get In Touch</div>
+  <h2 class="section-title reveal">Contact Me</h2>
+  <form class="contact-form glass panel reveal" id="contactForm">
+    <div class="form-row">
+      <input type="text" id="cf-name" placeholder="Your name" required>
+      <input type="email" id="cf-email" placeholder="Your email" required>
+    </div>
+    <textarea id="cf-message" rows="5" placeholder="Your message" required></textarea>
+    <button type="submit" class="btn primary">Send Message</button>
+    <p id="cf-status" class="mono" style="font-size:13px; color:var(--accent); margin-top:12px; min-height:18px;"></p>
+  </form>
+</section>
+
+<footer>
+  <div class="socials mono">
+    <a href="mailto:kavyaamma175@gmail.com">Email</a>
+    <a href="https://www.linkedin.com/in/kavya-a-r-7a9155309" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://github.com/kavyaamma175" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://leetcode.com/u/kavyaamma175/" target="_blank" rel="noopener">LeetCode</a>
+    <a href="https://www.hackerrank.com/profile/www_kavyaamma" target="_blank" rel="noopener">HackerRank</a>
+  </div>
+  <p>&copy; 2026 A.R. Kavya &middot; Coimbatore, Tamil Nadu</p>
+</footer>
+
+<script>
+  // ---- dark mode toggle ----
+  const root = document.documentElement;
+  const toggleBtn = document.getElementById('themeToggle');
+  const savedTheme = localStorage.getItem('kavya-theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  function applyTheme(theme){
+    if(theme === 'dark'){
+      root.setAttribute('data-theme', 'dark');
+      toggleBtn.textContent = '☀️';
+    } else {
+      root.removeAttribute('data-theme');
+      toggleBtn.textContent = '🌙';
+    }
+  }
+  applyTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
+
+  toggleBtn.addEventListener('click', () => {
+    const isDark = root.getAttribute('data-theme') === 'dark';
+    const next = isDark ? 'light' : 'dark';
+    applyTheme(next);
+    localStorage.setItem('kavya-theme', next);
+  });
+
+  // ---- typing effect ----
+  const roles = ["AI & Data Science Student", "ML Engineer in Progress", "RAG / NLP Enthusiast"];
+  const typedEl = document.getElementById('typed');
+  let ri = 0, ci = 0, deleting = false;
+
+  function type(){
+    const word = roles[ri];
+    typedEl.textContent = deleting ? word.slice(0, ci--) : word.slice(0, ci++);
+    if(!deleting && ci === word.length + 1){ deleting = true; setTimeout(type, 1200); return; }
+    if(deleting && ci === 0){ deleting = false; ri = (ri + 1) % roles.length; }
+    setTimeout(type, deleting ? 40 : 80);
+  }
+  type();
+
+  // ---- scroll reveal ----
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('show'); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // ---- contact form ----
+  const form = document.getElementById('contactForm');
+  const status = document.getElementById('cf-status');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('cf-name').value;
+    const email = document.getElementById('cf-email').value;
+    const message = document.getElementById('cf-message').value;
+    const subject = encodeURIComponent(`Portfolio enquiry from ${name}`);
+    const body = encodeURIComponent(`${message}\n\n— ${name} (${email})`);
+    window.location.href = `mailto:kavyaamma175@gmail.com?subject=${subject}&body=${body}`;
+    status.textContent = 'Opening your email app…';
+  });
+</script>
+
+</body>
+</html>
